@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Buscador de dados numa planilha</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    </head>
+    <body onload="load()">
+        <div id="container">
+            <div class="input">
+                <label>data</label>
+                <input type="text" id="data_hoje" value="" readonly>
+            </div>
+            <div class="input">
+                <label>Nome:</label>
+                <input type="text" id="nome" value="">
+            </div>
+            <div class="input">
+                <label>Sexo</label>
+                <input type="text" id="sexo" value="">
+            </div>
+            <div class="input">
+                <label>idade</label>
+                <input type="text" id="idade" value="">
+            </div>
+            <div class="input">
+                <label>Setor</label>
+                <input type="text" id="setor" value="">
+            </div>
+            <div class="input">
+                <label>Salário</label>
+                <input type="text" id="salario" value="">
+            </div>
+            <input type="submit" onclick="passarDados()">
+        </div>
+        <script>
+            const dataInput = document.getElementById("data_hoje");
+            const nomeInput = document.getElementById("nome");
+            const idadeInput = document.getElementById("idade");
+            const sexoInput = document.getElementById("sexo");
+            const setorInput = document.getElementById("setor");
+            const salarioInput = document.getElementById("salario");
+
+            const hoje = new Date();
+
+            const data = `${hoje.getDate()}/${String(hoje.getMonth()).padStart(2, '0')}/${hoje.getFullYear()}`;
+
+            let dadosPlanilha = [];
+
+            let x = 0;
+
+            function load()
+            {
+                dataInput.value = data;
+
+                
+
+                // Carrega a planilha automaticamente ao abrir a página
+                fetch("teste.xlsx")
+                .then(response => response.arrayBuffer())
+                .then(data => {
+                    const workbook = XLSX.read(data, { type: "array" });
+                    const primeiraAba = workbook.SheetNames[0];
+                    const planilha = workbook.Sheets[primeiraAba];
+                    dadosPlanilha = XLSX.utils.sheet_to_json(planilha);
+
+                    console.log("Planilha carregada:", dadosPlanilha);
+                })
+                .catch(err => console.error("Erro ao carregar a planilha:", err));
+            }
+
+            function passarDados()
+            {
+                for( x of dadosPlanilha)
+                {
+                    if(nomeInput.value == x.Nome)
+                    {
+
+                        let salario = parseFloat(x.Salario).toFixed(2);
+
+                        idadeInput.value = x.Idade;
+                        sexoInput.value = x.Sexo;
+                        setorInput.value = x.Setor;
+                        salarioInput.value = `R$${salario}`;
+                    }
+                }
+            }
+
+            
+        </script>
+    </body>
+</html>
+
+
