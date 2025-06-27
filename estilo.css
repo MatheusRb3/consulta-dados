@@ -1,0 +1,26 @@
+h1{
+    text-align: center;
+}
+
+.input{
+    margin-left: 35%;
+    margin-bottom: 10px;
+}
+
+.input input{
+    border: none;
+    outline: none;
+}
+
+.input input:hover{
+    outline: none;
+}
+
+.inputNome{
+    margin-left: 35%;
+    margin-bottom: 10px;
+}
+
+#busca{
+    margin-left: 45%;
+}
